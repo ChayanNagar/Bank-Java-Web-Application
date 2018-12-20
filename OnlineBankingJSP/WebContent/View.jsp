@@ -3,6 +3,9 @@
  
  	  <%
  	  String uid=(String)session.getAttribute("uid");
+ 	  
+ 	 if(uid==null)
+  	   response.sendRedirect("index.jsp");
 	   %>
 	<center><font color=red><h1>Welcome,<%=uid%></h1></font><hr/>
 	</center>
