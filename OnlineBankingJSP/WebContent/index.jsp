@@ -100,6 +100,6 @@ if(m!=null)
 </form>
 </center>
 
-<center><a href=CustomerLogin><h2>Go for Customer Login Page Here</h2></a></center>;
+<center><a href=CustomerLogin.jsp><h2>Go for Customer Login Page Here</h2></a></center>;
 </body>
 </html>

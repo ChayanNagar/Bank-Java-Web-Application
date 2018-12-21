@@ -1,6 +1,7 @@
 
 
 import java.io.IOException;
+
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,9 +13,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 import beans.EmpBean;
 import dao.MyDao;
-
+import java.util.Properties;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.*;
 /**
  * Servlet implementation class CustInsert
  */
@@ -73,6 +79,13 @@ PrintWriter out=response.getWriter();
 	    javax.servlet.RequestDispatcher rd=request.getRequestDispatcher("Customer.jsp");
 	    request.setAttribute("msg","<h1>Data Inserted Successfully...</h1>");
 	    rd.forward(request, response);
+	    
+	    String to=emailid;
+		 String sub="Welcome to our Bank Portal";
+		 String msg="Your password is:"+password;
+		 sendMail(to,sub,msg);
+	     out.println("Sent message successfully....");
+	
 	    }
 	    else
 	    	out.println("<h1>Data Not Inserted</h1>");
@@ -84,7 +97,57 @@ PrintWriter out=response.getWriter();
 			out.println("<center><a href=index.html><h4>Click here for Log Out</h2></a></center>");
 
 	}
+	public void sendMail(String to,String sub,String msg)
+	{
+	
+		String from = "project.chayan@gmail.com";
+	    final String username =  "project.chayan@gmail.com";//change accordingly
+	    final String password = "chayan1234";//change accordingly
+
+	    // Assuming you are sending email through relay.jangosmtp.net
+	    String host = "smtp.gmail.com";
+
+	    Properties props = new Properties();
+	    props.put("mail.smtp.auth", "true");
+	    props.put("mail.smtp.starttls.enable", "true");
+	    props.put("mail.smtp.host", host);
+	    props.put("mail.smtp.port", "587");
+
+	    // Get the Session object.
+	    Session session = Session.getInstance(props,
+	    new javax.mail.Authenticator() {
+	       protected PasswordAuthentication getPasswordAuthentication() {
+	          return new PasswordAuthentication(username, password);
+	       }
+	    });
+
+	    try {
+	       // Create a default MimeMessage object.
+	       Message message = new MimeMessage(session);
+
+	       // Set From: header field of the header.
+	       message.setFrom(new InternetAddress(from));
+
+	       // Set To: header field of the header.
+	       message.setRecipients(Message.RecipientType.TO,
+	       InternetAddress.parse(to));
+
+	       // Set Subject: header field
+	       message.setSubject(sub);
+
+	       // Now set the actual message
+	       message.setText(msg);
+
+	       // Send message
+	       
+	       Transport.send(message);
+	       } catch (Exception e) {
+	  	  e.printStackTrace();
+	  	     }		
 
 	}
+
+	
+}
 
 
